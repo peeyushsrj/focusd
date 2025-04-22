@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Focus Blocker",
+  "version": "1.1",
+  "description": "Blocks distracting sites outside defined time windows, with optional override",
+  "permissions": ["tabs", "scripting", "storage"],
+  "host_permissions": [
+    "*://mail.google.com/*",
+    "*://outlook.office.com/*",
+    "*://teams.microsoft.com/*",
+    "*://web.whatsapp.com/*",
+    "*://app.asana.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["block.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
+
