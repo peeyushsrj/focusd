@@ -18,28 +18,28 @@ function isNowAllowed() {
   const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
   return ALLOWED_WINDOWS.some(({ start, end }) => currentTime >= start && currentTime <= end);
 }
-        chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-          if (!tab.url) {
-            return;
-          }
-          const url = new URL(tab.url);
-          const domain = url.hostname;
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  if (!tab.url) {
+    return;
+  }
+  const url = new URL(tab.url);
+  const domain = url.hostname;
 
-          if (BLOCKED_DOMAINS.includes(domain)) {
-            const isAllowedNow = isNowAllowed();
+  if (BLOCKED_DOMAINS.includes(domain)) {
+    const isAllowedNow = isNowAllowed();
 
-            // Retrieve the overrides from storage
-            const { overrideUntil } = await chrome.storage.local.get("overrideUntil");
-            const overrideActive = overrideUntil && new Date().getTime() < overrideUntil;
+    // Retrieve the overrides from storage
+    const { overrideUntil } = await chrome.storage.local.get("overrideUntil");
+    const overrideActive = overrideUntil && new Date().getTime() < overrideUntil;
 
-            const { letMeInExpiry } = await chrome.storage.local.get("letMeInExpiry");
-            const letMeInActive = letMeInExpiry && new Date().getTime() < letMeInExpiry;
+    const { letMeInExpiry } = await chrome.storage.local.get("letMeInExpiry");
+    const letMeInActive = letMeInExpiry && new Date().getTime() < letMeInExpiry;
 
-            // Block the page unless it's allowed by time or an override is active
-            //if (!(isAllowedNow || overrideActive || letMeInActive)) {
-              chrome.tabs.update(tabId, {
-                url: chrome.runtime.getURL('block.html') + '?blockedUrl=' + encodeURIComponent(tab.url)
-              });
-            //}
-          }
-        });
+    // Block the page unless it's allowed by time or an override is active
+    if (!(isAllowedNow || overrideActive || letMeInActive)) {
+      chrome.tabs.update(tabId, {
+        url: chrome.runtime.getURL('block.html') + '?blockedUrl=' + encodeURIComponent(tab.url)
+      });
+    }
+  }
+});

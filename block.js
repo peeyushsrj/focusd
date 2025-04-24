@@ -18,25 +18,25 @@ async function updateAndShowCount() {
  }
 
  function overrideBlock() {
-          const until = Date.now() + 15 * 60 * 1000; // 15 minutes
-          chrome.storage.local.set({ letMeInExpiry: until }, function() {
-            chrome.runtime.sendMessage({ overrideUntil: until, blockedDomain });
-            if (blockedUrl) {
-              window.location.href = blockedUrl;
-            }
-          });
-        }
+    const until = Date.now() + 15 * 60 * 1000; // 15 minutes
+    chrome.storage.local.set({ letMeInExpiry: until }, function() {
+      chrome.runtime.sendMessage({ overrideUntil: until, blockedDomain });
+      if (blockedUrl) {
+        window.location.href = blockedUrl;
+      }
+    });
+  }
 document.addEventListener("DOMContentLoaded", () => {
-          document.getElementById('overrideButton').onclick = function() {
-            const letMeInExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes from now
-            chrome.storage.local.set({ letMeInExpiry }, function() {
-              alert('Access granted for the next 15 minutes.');
-              if (blockedUrl) {
-                window.location.href = blockedUrl;
-              }
-            });
-          };
-        });
+  document.getElementById('overrideButton').onclick = function() {
+    const letMeInExpiry = Date.now() + 15 * 60 * 1000; // 15 minutes from now
+    chrome.storage.local.set({ letMeInExpiry }, function() {
+      alert('Access granted for the next 15 minutes.');
+      if (blockedUrl) {
+        window.location.href = blockedUrl;
+      }
+    });
+  };
+});
 
 
  setInterval(() => {
